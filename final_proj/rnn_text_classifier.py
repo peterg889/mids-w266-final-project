@@ -6,6 +6,7 @@ class RnnTextClassifier:
                  lr=0.001):
         saved_args = locals()
         print(saved_args)
+        print("embedding" ,embedding.shape)
         self.batch_size = batch_size
         self.sentence_length = sentence_length
         self.embedding = embedding
@@ -42,7 +43,6 @@ class RnnTextClassifier:
         # define the RNN operation
         with tf.name_scope('rnn_ops'):
             output, state = tf.nn.dynamic_rnn(cell, embedding_input, time_major=False, dtype=self.dtype)
-            # output, state = tf.nn.dynamic_rnn(cell, embedding_input, time_major=True, dtype=self.dtype)
 
         to_classify = state
         if self.cell_layer_num > 1:
