@@ -2,8 +2,9 @@ from __future__ import print_function
 from __future__ import division
 
 import tensorflow as tf
+from embedding import *
 
-def embedding_layer(ids_, V, embed_dim, init_scale=0.001):
+def embedding_layer(ids_, V, embed_dim, init_scale=0.001, embedding_path = ""):
     """Construct an embedding layer.
 
     You should define a variable for the embedding matrix, and initialize it
@@ -25,11 +26,18 @@ def embedding_layer(ids_, V, embed_dim, init_scale=0.001):
     # Approximately 2-3 lines of code.
     # Please name your embedding matrix 'W_embed', as in:
     #   W_embed_ = tf.get_variable("W_embed", ...)
+    embedding = None
+    if embedding_path != "":
+        embedding = Word2VecEmbedding(embedding_path, V.size, train_embedding)
+    else:
+        embedding = RandomEmbedding(V.size, embed_dim, init_scale)
 
-    W_embed_ = tf.get_variable(name='W_embed', 
-                               shape=(V, embed_dim), 
-                               initializer=tf.random_uniform_initializer(-init_scale, init_scale))
-    xs_ = tf.nn.embedding_lookup(W_embed_, ids_)
+    emb_w_ = tf.Variable(initial_value=embedding.get_w(), name="w", trainable=embedding.is_trainable())
+
+    # W_embed_ = tf.get_variable(name='W_embed', 
+    #                           shape=(V.size, embed_dim), 
+    #                           initializer=tf.random_uniform_initializer(-init_scale, init_scale))
+    xs_ = tf.nn.embedding_lookup(emb_w_, ids_)
 
     #### END(YOUR CODE) ####
     return xs_

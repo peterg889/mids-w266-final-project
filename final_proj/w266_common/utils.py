@@ -327,3 +327,10 @@ def multi_batch_generator(batch_size, *data_arrays):
     for i in range(0, num_examples, batch_size):
         # Yield matching slices from each data array.
         yield tuple(data[i:i+batch_size] for data in data_arrays)
+        
+def flatten_list(x):
+    ret = []
+    for sublist in x:
+        for item in sublist:
+            ret.append(item)
+    return ret

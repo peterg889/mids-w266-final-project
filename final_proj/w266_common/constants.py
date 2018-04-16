@@ -4,4 +4,5 @@
 START_TOKEN = u"<s>"
 END_TOKEN   = u"</s>"
 UNK_TOKEN   = u"<unk>"
+PAD_TOKEN   = u"<pad>"
 

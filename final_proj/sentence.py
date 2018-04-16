@@ -1,27 +1,30 @@
+from w266_common import utils, vocabulary
+
 class Sentence:
     def __init__(self, sentence, label, tokens):
         self.sentence = sentence
         self.label = label
         self.tokens = tokens
-        self.tokens_ids = []
-        self.labels_ids = []
+        self.token_ids = []
+        self.padded_tokens = []
+        self.padded_tokens_ids = []
+
+        self.padded = False
+        self.vocab_applied = False
+        # self.labels_ids = []
 
     def pad_to(self, length, pad_token):
         diff = length - len(self.tokens)
-        new_tokens = [pad_token] * diff
-        self.tokens = new_tokens + self.tokens
+        if diff >= 0:
+            new_tokens = [pad_token] * diff
+            self.padded_tokens = self.tokens + new_tokens
+        else:
+            self.padded_tokens = self.tokens[:diff]
+        self.padded = True
+        
 
-        #print(self.tokens)
-
-    def apply_vocabs(self, vocab, unk, labels):
-        label_size = len(labels)
-        for token in self.tokens:
-            if token in vocab:
-                self.tokens_ids.append(vocab[token])
-            else:
-                self.tokens_ids.append(vocab[unk])
-            self.labels_ids = [0]*label_size
-            self.labels_ids[labels[self.label]] = 1
-
-        #print(len(self.tokens_ids))
-        #print(self.tokens_ids)
+    def apply_vocabs(self, vocab):
+        if self.padded_tokens:
+            self.padded_tokens_ids = vocab.words_to_ids(self.padded_tokens)
+        self.token_ids = vocab.words_to_ids(self.tokens)
+        self.vocab_applied = True

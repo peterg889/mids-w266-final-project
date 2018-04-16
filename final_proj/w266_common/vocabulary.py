@@ -10,6 +10,7 @@ class Vocabulary(object):
     START_TOKEN = constants.START_TOKEN
     END_TOKEN   = constants.END_TOKEN
     UNK_TOKEN   = constants.UNK_TOKEN
+    PAD_TOKEN   = constants.PAD_TOKEN
 
     def __init__(self, tokens, size=None,
                  progressbar=lambda l:l):
@@ -30,9 +31,9 @@ class Vocabulary(object):
             prev_word = word
         self.bigram_counts.default_factory = None  # make into a normal dict
 
-        # Leave space for "<s>", "</s>", and "<unk>"
-        top_counts = self.unigram_counts.most_common(None if size is None else (size - 3))
-        vocab = ([self.START_TOKEN, self.END_TOKEN, self.UNK_TOKEN] +
+        # Leave space for "<s>", "</s>", "<unk>", and "<pad>"
+        top_counts = self.unigram_counts.most_common(None if size is None else (size - 4))
+        vocab = ([self.START_TOKEN, self.END_TOKEN, self.UNK_TOKEN, self.PAD_TOKEN] +
                  [w for w,c in top_counts])
 
         # Assign an id to each word, by frequency
@@ -49,6 +50,7 @@ class Vocabulary(object):
         self.START_ID = self.word_to_id[self.START_TOKEN]
         self.END_ID = self.word_to_id[self.END_TOKEN]
         self.UNK_ID = self.word_to_id[self.UNK_TOKEN]
+        self.PAD_ID = self.word_to_id[self.PAD_TOKEN]
 
     @property
     def num_unigrams(self):
