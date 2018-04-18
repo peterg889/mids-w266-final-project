@@ -26,7 +26,7 @@ def extend_y(y):
     return np.array(ret)
 
 class TrainingSet:
-    def __init__(self, pos_files = None, neg_files = None, tokenizer = None, max_examples = 0):
+    def __init__(self, pos_files = None, neg_files = None, tokenizer = None, max_examples = 0, name=""):
         if pos_files:
             self.pos_sentences = self._load_example_set(pos_files, KID_APPROPRIATE, tokenizer,  max_examples)
         else:
@@ -46,6 +46,7 @@ class TrainingSet:
         self.train_sents = None
         self.dev_sents = None
         self.test_sentences = None
+        self.name = name
         
     def load_test_arr(self, test_arr, tokenizer):
         self.test_sentences = self._load_test_arr(test_arr, tokenizer)
